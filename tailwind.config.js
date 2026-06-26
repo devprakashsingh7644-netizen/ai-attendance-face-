@@ -10,6 +10,12 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        display: ['Fredoka', 'Baloo 2', 'sans-serif'],
+        body: ['Poppins', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '28': '28px',
+        '36': '36px',
       },
       colors: {
         brand: {
@@ -24,6 +30,17 @@ export default {
           800: '#3730a3',
           900: '#312e81',
           950: '#1e1b4b',
+        },
+        pastel: {
+          bg1: '#FDF6FF',
+          bg2: '#EDE9FE',
+          bg3: '#F8F4FF',
+          bg4: '#FFF9F2',
+          purple: '#A855F7',
+          pink: '#F9A8D4',
+          yellow: '#FFE082',
+          blue: '#93C5FD',
+          green: '#BBF7D0',
         },
       },
       animation: {
