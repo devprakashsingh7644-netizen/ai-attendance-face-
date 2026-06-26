@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { loadModels, createFaceMatcher, createLabeledDescriptors } from '../lib/faceApi';
 import * as faceapi from 'face-api.js';
-import { Camera, AlertCircle, User, Loader2, CameraOff, Wifi, WifiOff, Clock } from 'lucide-react';
+import { Camera, AlertCircle, User, Loader2, CameraOff, Wifi, WifiOff, Clock, RotateCcw } from 'lucide-react';
 import { useNotification } from '../components/NotificationProvider';
 
 // ===== Inline base64 success sound (short ding) =====
@@ -171,6 +171,7 @@ export default function Scanner() {
   
   const [isModelsLoaded, setIsModelsLoaded] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [cameraMode, setCameraMode] = useState('user');
   const [faceMatcher, setFaceMatcher] = useState(null);
   const [loadingMsg, setLoadingMsg] = useState('Initializing scanner...');
   const [scannerStatus, setScannerStatus] = useState('loading'); // ready|scanning|recognized|not-found|offline|loading
@@ -285,7 +286,7 @@ export default function Scanner() {
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }
+        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: cameraMode }
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -606,13 +607,26 @@ export default function Scanner() {
 
           {/* Camera Button */}
           {isCameraActive ? (
-            <button
-              onClick={stopCamera}
-              className="bg-red-500/10 text-red-500 dark:text-red-400 hover:bg-red-500/20 px-4 py-2 rounded-xl font-semibold transition-all border border-red-500/20 text-sm flex items-center gap-2"
-            >
-              <CameraOff size={16} />
-              <span className="hidden sm:inline">Stop</span>
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={stopCamera}
+                className="bg-red-500/10 text-red-500 dark:text-red-400 hover:bg-red-500/20 px-4 py-2 rounded-xl font-semibold transition-all border border-red-500/20 text-sm flex items-center gap-2"
+              >
+                <CameraOff size={16} />
+                <span className="hidden sm:inline">Stop</span>
+              </button>
+              <button
+                onClick={() => {
+                  setCameraMode(prev => prev === 'user' ? 'environment' : 'user');
+                  stopCamera();
+                  setTimeout(startCamera, 0);
+                }}
+                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 px-4 py-2 rounded-xl font-semibold transition-all text-sm flex items-center gap-2"
+              >
+                <RotateCcw size={16} />
+                <span className="hidden sm:inline">Flip Camera</span>
+              </button>
+            </div>
           ) : (
             <button
               onClick={startCamera}
