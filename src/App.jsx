@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { NotificationProvider } from './components/NotificationProvider';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -10,10 +11,12 @@ import Attendance from './pages/Attendance';
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return (
-    <div className="flex items-center justify-center h-screen bg-slate-950">
+    <div className="flex items-center justify-center h-screen bg-[hsl(var(--background))] transition-theme">
       <div className="text-center space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto"></div>
-        <p className="text-slate-400 text-sm">Loading...</p>
+        <div className="relative">
+          <div className="w-14 h-14 rounded-full border-[3px] border-indigo-500/20 border-t-indigo-500 animate-spin mx-auto" />
+        </div>
+        <p className="text-slate-400 text-sm font-medium">Loading...</p>
       </div>
     </div>
   );
@@ -45,7 +48,9 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppRoutes />
+        <NotificationProvider>
+          <AppRoutes />
+        </NotificationProvider>
       </AuthProvider>
     </BrowserRouter>
   );

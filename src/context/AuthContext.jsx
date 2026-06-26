@@ -28,13 +28,18 @@ export function AuthProvider({ children }) {
     return data;
   };
 
+  const devLogin = () => {
+    setUser({ email: 'demo@teacher.com', id: 'demo-user-123' });
+  };
+
   const logout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    setUser(null); // Also clear mock user
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, devLogin }}>
       {children}
     </AuthContext.Provider>
   );
