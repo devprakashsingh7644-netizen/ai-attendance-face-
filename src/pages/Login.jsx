@@ -17,10 +17,11 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     setLoading(true);
+    const redirectUrl = import.meta.env.VITE_APP_URL ?? window.location.origin;
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: window.location.origin },
+        options: { redirectTo: redirectUrl },
       });
       if (error) throw error;
     } catch (err) {
